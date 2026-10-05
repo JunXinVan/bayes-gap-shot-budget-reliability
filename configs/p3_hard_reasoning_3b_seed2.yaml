@@ -1,0 +1,45 @@
+run:
+  name: p3_hard_reasoning_3b_seed2
+  seed: 789
+  output_dir: results
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 32
+task:
+  backend: hard_reasoning
+  hard_reasoning:
+    data_dir: /root/autodl-tmp/data/hard_reasoning
+    split: test
+    max_examples: 200
+    start_index: 0
+    demo_pool_size: 200
+prompt:
+  system: ''
+  demo_prefix: 'Problem: '
+  query_prefix: 'Problem: '
+  answer_prefix: 'Solution: '
+grid:
+  k_values:
+  - 0
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
+  max_demos: 16
+perturbations: []
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: p3_hard_reasoning_3b_seed2
+scoring:
+  batch_size: 32
+plot:
+  enabled: false

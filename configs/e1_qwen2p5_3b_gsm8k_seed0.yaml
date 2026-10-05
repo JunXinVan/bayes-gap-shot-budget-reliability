@@ -1,0 +1,45 @@
+run:
+  name: e1_qwen2p5_3b_gsm8k_seed0
+  seed: 123
+  output_dir: results
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 32
+task:
+  backend: gsm8k
+  gsm8k:
+    data_dir: /root/autodl-tmp/data/gsm8k
+    split: test
+    max_examples: 200
+    start_index: 0
+    demo_pool_size: 200
+prompt:
+  system: ''
+  demo_prefix: ''
+  query_prefix: ''
+  answer_prefix: ''
+grid:
+  k_values:
+  - 0
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
+  max_demos: 16
+perturbations: []
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_3b_gsm8k_seed0
+scoring:
+  batch_size: 32
+plot:
+  enabled: false

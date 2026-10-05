@@ -1,0 +1,75 @@
+run:
+  name: e1_qwen2p5_3b_arc_8k_separator_smoke_v2
+  seed: 123
+  output_dir: results_smoke_20260309
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 4
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 8k
+    max_examples: 2
+    candidates:
+    - A
+    - B
+    - C
+    - D
+prompt:
+  system: ''
+  demo_prefix: 'Question: '
+  query_prefix: 'Question: '
+  answer_prefix: 'Answer: '
+grid:
+  k_values:
+  - 0
+  - 1
+  - 2
+  max_demos: 2
+perturbations:
+- kind: separator_replace
+  template_replacements:
+  - - 'Question: '
+    - 'Question:
+
+      ---
+
+      '
+  - - 'Answer: '
+    - 'Answer:
+
+      ---
+
+      '
+- kind: separator_replace
+  template_replacements:
+  - - 'Question: '
+    - 'Question:
+
+      '
+  - - 'Answer: '
+    - 'Answer:
+
+      '
+- kind: separator_replace
+  template_replacements:
+  - - 'Question: '
+    - 'Question: | '
+  - - 'Answer: '
+    - 'Answer: | '
+cache:
+  enabled: false
+scoring:
+  batch_size: 4
+plot:
+  enabled: false

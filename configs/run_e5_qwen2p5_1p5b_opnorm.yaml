@@ -1,0 +1,22 @@
+run:
+  name: e5_opnorm_qwen2p5_1p5b
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: Qwen/Qwen2.5-1.5B-Instruct
+    dtype: float16
+    device: auto
+    trust_remote_code: false
+
+certificates:
+  opnorm:
+    enabled: true
+    num_iter: 20
+    seed: 123
+    out_dir: results/certificates
+    device: cuda
+    dtype: float16
+

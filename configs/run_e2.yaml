@@ -1,0 +1,59 @@
+run:
+  name: e2_decision
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: meta-llama/Llama-3.1-8B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: false
+
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 8k
+    max_examples: 200
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8, 16, 32]
+  max_demos: 32
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 4
+    seed: 999
+
+selection_rule:
+  # v55 heuristic (Appendix "Shot-Selection"): k_hat = argmin_k entropy_k + lambda * BG_disagree_k
+  lambdas: [0.1, 0.3, 1.0, 3.0]
+
+stop_rule:
+  # Optional alternative "danger regime" stopping heuristic:
+  # stop when entropy gain saturates AND disagreement starts to rise.
+  kind: danger_regime
+  enabled: true
+  tau_entropy_drop: 0.01
+  require_bg_non_decrease: true
+
+baselines:
+  fixed_k: [8, 32]
+
+scoring:
+  batch_size: 4
+
+plot:
+  enabled: true
+  # policy: selection_lambda_0.3

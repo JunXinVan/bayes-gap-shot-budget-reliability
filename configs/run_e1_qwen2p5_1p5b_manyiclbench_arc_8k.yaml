@@ -1,0 +1,52 @@
+run:
+  name: e1_qwen2p5_1p5b_manyiclbench_arc_8k
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: Qwen/Qwen2.5-1.5B-Instruct  # 更小的模型，可能更容易不稳定
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 8  # 更大的 batch，小模型显存足够
+
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 8k
+    max_examples: 100  # 减少样本数加速
+    candidates: ["A", "B", "C", "D"]
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8, 16, 32, 64]
+  max_demos: 64
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 4
+    seed: 999
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_1p5b_manyiclbench_arc_8k
+
+scoring:
+  batch_size: 8
+
+plot:
+  enabled: true

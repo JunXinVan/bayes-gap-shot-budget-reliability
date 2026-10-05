@@ -1,0 +1,54 @@
+run:
+  name: e1_qwen2p5_3b_arc_strict_seed0
+  seed: 123
+  output_dir: results
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 32
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 1k
+    max_examples: 200
+    candidates:
+    - A
+    - B
+    - C
+    - D
+prompt:
+  system: ''
+  demo_prefix: "\u3010\u6848\u4F8B\u3011Question: "
+  query_prefix: "\u3010\u95EE\u9898\u3011Question: "
+  answer_prefix: 'Answer: '
+  template: "\u8BF7\u4E25\u683C\u7814\u7A76\u4EE5\u4E0B\u6848\u4F8B\uFF0C\u5E76\u4E25\
+    \u683C\u53C2\u8003\u6848\u4F8B\u7B54\u9898\u3002\n\n{% if demos %}\n{% for demo\
+    \ in demos %}\n{{ demo.input_text }}\n\u7B54\u6848: {{ demo.output_text }}\n\n\
+    {% endfor %}\n{% endif %}\n{{ query }}\n\u7B54\u6848:\n"
+grid:
+  k_values:
+  - 0
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
+  max_demos: 16
+perturbations: []
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_3b_arc_strict_seed0
+scoring:
+  batch_size: 32
+plot:
+  enabled: false

@@ -1,0 +1,47 @@
+run:
+  name: e2_longiclbench_dummy_goemotion
+  seed: 123
+  output_dir: results
+
+model:
+  backend: dummy
+  dummy:
+    num_candidates: 28
+
+task:
+  backend: longiclbench
+  longiclbench:
+    dataset_name: TIGER-Lab/LongICLBench
+    split: GoEmotion
+    max_examples: 3
+    rounds: [1, 2, 3, 4, 5]
+    batch_size: 1
+
+prompt:
+  system: ""
+  query_prefix: "comment: "
+
+grid:
+  k_values: [1, 2, 3, 4, 5]
+  max_demos: 5
+
+perturbations:
+  - kind: pad_shift
+    pad_token: "\n"
+    pad_lengths: [32]
+
+selection_rule:
+  lambdas: [0.1, 0.3, 1.0]
+
+stop_rule:
+  kind: danger_regime
+  enabled: true
+  tau_entropy_drop: 0.01
+  require_bg_non_decrease: true
+
+baselines:
+  fixed_k: [1, 3, 5]
+
+plot:
+  enabled: false
+

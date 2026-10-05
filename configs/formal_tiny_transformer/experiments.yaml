@@ -1,0 +1,222 @@
+# Formal Tiny Transformer Experiments
+# Replaces all Qwen experiments from EXPERIMENT_PLAN_MATRIX_E1_E3_v60.md
+
+meta:
+  description: "Complete experimental matrix using Tiny Transformer instead of Qwen"
+  based_on: "EXPERIMENT_PLAN_MATRIX_E1_E3_v60.md"
+  date: "2026-02-22"
+
+# ==============================================================================
+# P0: Core experiments (minimum viable set for paper)
+# ==============================================================================
+
+p0_experiments:
+  # ARC-Challenge equivalent (4 classes)
+  - run_id: "tt_arc_1k_order"
+    priority: "P0"
+    paper_ref: "Paper-E2"
+    goal: "ARC(1k) order-family curves with Tiny Transformer"
+    model: "d32_L2_h2"
+    train_k: 4
+    test_k: [0, 1, 2, 4, 8, 16]
+    task:
+      type: "multiclass"
+      n_classes: 4
+      vocab_size: 100
+    perturb_family: "order"
+    perturb_variants: ["reverse", "shuffle_4"]
+    n_train_samples: 2000
+    n_test_samples: 500
+    n_epochs: 40
+    
+  - run_id: "tt_arc_1k_pad"
+    priority: "P0"
+    paper_ref: "Paper-E2"
+    goal: "ARC(1k) pad-family curves with Tiny Transformer"
+    model: "d32_L2_h2"
+    train_k: 4
+    test_k: [0, 1, 2, 4, 8, 16]
+    task:
+      type: "multiclass"
+      n_classes: 4
+      vocab_size: 100
+    perturb_family: "pad"
+    perturb_variants: [32, 64, 128]
+    n_train_samples: 2000
+    n_test_samples: 500
+    n_epochs: 40
+    
+  - run_id: "tt_arc_1k_template"
+    priority: "P0"
+    paper_ref: "Paper-E2"
+    goal: "ARC(1k) template-family curves with Tiny Transformer"
+    model: "d32_L2_h2"
+    train_k: 4
+    test_k: [0, 1, 2, 4, 8, 16]
+    task:
+      type: "multiclass"
+      n_classes: 4
+      vocab_size: 100
+    perturb_family: "template"
+    perturb_variants: ["v1"]
+    n_train_samples: 2000
+    n_test_samples: 500
+    n_epochs: 40
+    
+  # Position-lock intervention (E3)
+  - run_id: "tt_arc_1k_pad_position_lock"
+    priority: "P0"
+    paper_ref: "Paper-E3"
+    goal: "Position-lock intervention on ARC(1k) pad"
+    model: "d32_L2_h2"
+    train_k: 4
+    test_k: [0, 1, 2, 4, 8, 16]
+    task:
+      type: "multiclass"
+      n_classes: 4
+      vocab_size: 100
+    perturb_family: "pad"
+    perturb_variants: [32, 64, 128]
+    intervention: "position_lock"
+    n_train_samples: 2000
+    n_test_samples: 500
+    n_epochs: 40
+
+# ==============================================================================
+# P1: Extended experiments (longer budget, larger label space)
+# ==============================================================================
+
+p1_experiments:
+  # 8k budget (longer context)
+  - run_id: "tt_arc_8k_order"
+    priority: "P1"
+    paper_ref: "Paper-E2"
+    goal: "ARC(8k) order-family curves"
+    model: "d64_L2_h2"
+    train_k: 8
+    test_k: [0, 1, 2, 4, 8, 16, 32]
+    task:
+      type: "multiclass"
+      n_classes: 4
+      vocab_size: 100
+    perturb_family: "order"
+    n_train_samples: 2000
+    n_epochs: 40
+    
+  # GoEmotion (28 classes)
+  - run_id: "tt_goemotion_pad"
+    priority: "P1"
+    paper_ref: "Paper-E2"
+    goal: "GoEmotion (28 classes) pad-family"
+    model: "d64_L2_h2"
+    train_k: 4
+    test_k: [0, 1, 2, 4, 8]
+    task:
+      type: "multiclass"
+      n_classes: 28
+      vocab_size: 100
+    perturb_family: "pad"
+    n_train_samples: 2000
+    n_epochs: 40
+    
+  # BANKING77 (77 classes)
+  - run_id: "tt_banking77_template"
+    priority: "P1"
+    paper_ref: "Paper-E2"
+    goal: "BANKING77 (77 classes) template-family"
+    model: "d64_L4_h4"
+    train_k: 4
+    test_k: [0, 1, 2, 4, 8]
+    task:
+      type: "multiclass"
+      n_classes: 77
+      vocab_size: 100
+    perturb_family: "template"
+    n_train_samples: 2000
+    n_epochs: 40
+
+# ==============================================================================
+# P2: Optional/Stress tests
+# ==============================================================================
+
+p2_experiments:
+  # Discovery (174 classes - expensive)
+  - run_id: "tt_discovery_pad"
+    priority: "P2"
+    paper_ref: "Paper-E2"
+    goal: "Discovery (174 classes) pad-family"
+    model: "d128_L4_h4"
+    train_k: 4
+    test_k: [0, 1, 2, 4, 8]
+    task:
+      type: "multiclass"
+      n_classes: 174
+      vocab_size: 100
+    perturb_family: "pad"
+    n_train_samples: 2000
+    n_epochs: 40
+    
+  # Seed robustness
+  - run_id: "tt_arc_8k_order_seed1"
+    priority: "P2"
+    paper_ref: "Paper-E2"
+    goal: "ARC(8k) order with seed=456 (robustness)"
+    model: "d64_L2_h2"
+    train_k: 8
+    test_k: [0, 1, 2, 4, 8, 16, 32]
+    task:
+      type: "multiclass"
+      n_classes: 4
+      vocab_size: 100
+    perturb_family: "order"
+    seed: 456
+    n_train_samples: 2000
+    n_epochs: 40
+
+# ==============================================================================
+# Training Configuration Defaults
+# ==============================================================================
+
+training_defaults:
+  n_epochs: 40
+  batch_size: 64
+  lr: 0.001
+  weight_decay: 0.0001
+  optimizer: "Adam"
+  scheduler: "CosineAnnealingLR"
+  grad_clip: 1.0
+
+# ==============================================================================
+# Model Architecture Presets
+# ==============================================================================
+
+model_presets:
+  d32_L1_h2:
+    d_model: 32
+    n_layers: 1
+    n_heads: 2
+    description: "Small - 25K params"
+    
+  d32_L2_h2:
+    d_model: 32
+    n_layers: 2
+    n_heads: 2
+    description: "Optimal - 37K params (RECOMMENDED)"
+    
+  d64_L2_h2:
+    d_model: 64
+    n_layers: 2
+    n_heads: 2
+    description: "Medium - 124K params"
+    
+  d64_L4_h4:
+    d_model: 64
+    n_layers: 4
+    n_heads: 4
+    description: "Large - 222K params"
+    
+  d128_L4_h4:
+    d_model: 128
+    n_layers: 4
+    n_heads: 4
+    description: "XLarge - 838K params"

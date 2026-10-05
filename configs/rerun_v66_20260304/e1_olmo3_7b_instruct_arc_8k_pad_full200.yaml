@@ -1,0 +1,51 @@
+run:
+  name: e1_olmo3_7b_instruct_arc_8k_pad_full200
+  seed: 123
+  output_dir: results_rerun_v66_20260304
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/allenai/Olmo-3-7B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: false
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 8
+
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 8k
+    max_examples: 200
+    candidates: ["A", "B", "C", "D"]
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8, 16, 32]
+  max_demos: 32
+
+perturbations:
+  - kind: pad_shift
+    pad_lengths: [32, 128, 512]
+
+cache:
+  enabled: true
+  dir: data/cache_scores_rerun_v66_20260304
+  namespace: olmo3_7b_instruct_arc_8k_pad_full200_rerun20260304
+
+scoring:
+  batch_size: 8
+
+plot:
+  enabled: true
+

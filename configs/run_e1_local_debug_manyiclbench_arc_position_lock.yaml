@@ -1,0 +1,56 @@
+run:
+  name: e1_local_debug_manyiclbench_arc_position_lock
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: gpt2
+    dtype: float32
+    device: auto
+    trust_remote_code: false
+    use_chat_template: false
+    add_generation_prompt: false
+    batch_size: 8
+
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 1k
+    max_examples: 5
+    candidates: ["A", "B", "C", "D"]
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8]
+  max_demos: 8
+
+position_lock:
+  enabled: true
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 2
+    seed: 999
+  - kind: pad_shift
+    pad_token: "\n"
+    pad_lengths: [32]
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: gpt2_manyiclbench_arc_debug
+
+plot:
+  enabled: false
+

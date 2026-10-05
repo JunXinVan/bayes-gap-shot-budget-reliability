@@ -1,0 +1,49 @@
+run:
+  name: e1_qwen2p5_3b_longiclbench_discovery_pad_fast20
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 2
+
+task:
+  backend: longiclbench
+  longiclbench:
+    dataset_name: launch/LongICLBench
+    split: Discovery
+    rounds: [0, 1, 2, 3, 4, 5]
+    max_examples: 25
+    data_fraction: 0.2
+    batch_size: 1
+
+# LongICLBench ships pre-built prompts; query_prefix is used for pad-shift.
+prompt:
+  system: ""
+  query_prefix: "the most suitable conjunction word in the previous ( ) is  "
+
+grid:
+  k_values: [0, 2, 5]
+  max_demos: 5
+
+perturbations:
+  - kind: pad_shift
+    pad_lengths: [32]
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_3b_discovery_fast20
+
+scoring:
+  batch_size: 2
+
+plot:
+  enabled: true

@@ -1,0 +1,47 @@
+run:
+  name: e1_olmo3_7b_instruct_manyiclbench_trec50_order_fast20_seed1
+  seed: 1
+  output_dir: results_rerun_v63_20260304
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/allenai/Olmo-3-7B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: false
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 8
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: trec_50
+    split: seed1
+    prefix_key: 1k
+    max_examples: 200
+    data_fraction: 0.2
+prompt:
+  system: ''
+grid:
+  k_values:
+  - 0
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
+  max_demos: 16
+perturbations:
+- kind: reverse_order
+- kind: shuffle
+  num_samples: 4
+  seed: 999
+cache:
+  enabled: true
+  dir: data/cache_scores_rerun_v63_20260304
+  namespace: olmo3_7b_instruct_trec50_fast20_rerun20260304
+scoring:
+  batch_size: 8
+plot:
+  enabled: true

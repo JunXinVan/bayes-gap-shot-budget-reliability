@@ -1,0 +1,4 @@
+/root/autodl-tmp/overprompting-exp/configs/rerun_v68_20260315_fullval/e1_qwen2p5_3b_hellaswag_order_fullval_seed456.yaml
+/root/autodl-tmp/overprompting-exp/configs/rerun_v68_20260315_fullval/e1_qwen2p5_3b_hellaswag_order_fullval_seed789.yaml
+/root/autodl-tmp/overprompting-exp/configs/rerun_v68_20260315_fullval/e1_olmo3_7b_instruct_hellaswag_order_fullval_seed456.yaml
+/root/autodl-tmp/overprompting-exp/configs/rerun_v68_20260315_fullval/e1_olmo3_7b_instruct_hellaswag_order_fullval_seed789.yaml

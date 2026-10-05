@@ -1,0 +1,51 @@
+# Qwen 2.5 1.5B + 真实 ARC-Challenge（本地模型，无联网）
+# 使用本地缓存: hf_cache/modelscope/Qwen/Qwen2___5-1___5B-Instruct
+
+run:
+  name: e1_qwen2p5_1p5b_arc_real_local
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/modelscope/Qwen/Qwen2___5-1___5B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 8
+
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 8k
+    max_examples: 100
+    candidates: ["A", "B", "C", "D"]
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8, 16, 32]
+  max_demos: 32
+
+perturbations: []
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_1p5b_arc_real_local
+
+scoring:
+  batch_size: 8
+
+plot:
+  enabled: true

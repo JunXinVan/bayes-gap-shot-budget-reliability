@@ -1,0 +1,56 @@
+# OLMo-3 Instruct quick check (no chat template): ARC-Challenge, 8k template.
+# Rationale: candidate-scoring prompts already include an explicit "Answer:" slot; some chat templates
+# can interfere with teacher-forcing on short candidates (A/B/C/D). This run tests raw-prompt mode.
+run:
+  name: e1_olmo3_7b_instruct_nochat_arc_8k_quick50
+  seed: 123
+  output_dir: results_rerun_v61_20260303
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/allenai/Olmo-3-7B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: false
+    use_chat_template: false
+    add_generation_prompt: false
+    batch_size: 4
+
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 8k
+    max_examples: 50
+    candidates: ["A", "B", "C", "D"]
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 4, 16]
+  max_demos: 16
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 1
+    seed: 999
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: olmo3_instruct_nochat_arc_8k_quick50
+
+scoring:
+  batch_size: 4
+
+plot:
+  enabled: false
+

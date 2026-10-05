@@ -1,0 +1,60 @@
+run:
+  name: gate_pilot_position_lock
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/modelscope/Qwen/Qwen2.5-7B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 4
+
+task:
+  backend: local_jsonl
+  local_jsonl:
+    path: data/gate_pilot_task.jsonl
+    candidate_field: candidates
+    input_field: input
+    gold_field: gold
+    id_field: id
+    demos_field: demos
+    max_examples: 10
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8, 16, 32]
+  max_demos: 32
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 4
+    seed: 999
+  - kind: pad_shift
+    pad_token: "\n"
+    pad_lengths: [32, 128, 512]
+
+# E3 干预：position-lock（锁定 query 绝对位置）
+position_lock:
+  enabled: true
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_7b_gate_pilot
+
+scoring:
+  batch_size: 4
+
+plot:
+  enabled: true

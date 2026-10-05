@@ -1,0 +1,49 @@
+run:
+  name: e1_qwen2p5_3b_longiclbench_goemotion_pad_fast20_v2
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 8
+
+task:
+  backend: longiclbench
+  longiclbench:
+    dataset_name: launch/LongICLBench
+    split: GoEmotion
+    rounds: [0, 1, 2, 3, 4, 5]
+    max_examples: 50
+    data_fraction: 0.2
+
+prompt:
+  system: ""
+  demo_prefix: "Text: "
+  query_prefix: "Text: "
+  answer_prefix: "Emotion: "
+
+grid:
+  k_values: [0, 1, 2, 3, 4, 5]
+  max_demos: 5
+
+perturbations:
+  - kind: pad_shift
+    pad_lengths: [32, 128, 512]
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_3b_goemotion_fast20
+
+scoring:
+  batch_size: 8
+
+plot:
+  enabled: true

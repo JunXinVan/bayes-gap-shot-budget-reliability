@@ -1,0 +1,58 @@
+run:
+  name: e1_qwen2p5_3b_arc_8k_order_quick10_k64_mainpert
+  seed: 123
+  output_dir: results_rerun_v65_20260304
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 16
+
+task:
+  backend: manyiclbench
+  manyiclbench:
+    dataset_name: launch/ManyICLBench
+    task_name: ARC-Challenge
+    split: seed0
+    prefix_key: 8k
+    max_examples: 10
+    candidates: ["A", "B", "C", "D"]
+
+prompt:
+  system: ""
+  demo_prefix: "Question: "
+  query_prefix: "Question: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8, 16, 32, 64]
+  max_demos: 64
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 4
+
+main_prompt_perturbation:
+  enabled: true
+  mode: mean
+  include_base: false
+  max_samples: 0
+
+cache:
+  enabled: true
+  dir: data/cache_scores_rerun_v65_20260304
+  namespace: qwen2p5_3b_arc_8k_order_quick10_k64_mainpert_rerun20260304
+
+scoring:
+  batch_size: 16
+
+plot:
+  enabled: true
+

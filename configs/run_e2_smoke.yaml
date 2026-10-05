@@ -1,0 +1,51 @@
+run:
+  name: e2_smoke
+  seed: 123
+  output_dir: results
+
+model:
+  backend: dummy
+  dummy:
+    num_candidates: 4
+
+task:
+  backend: local_jsonl
+  local_jsonl:
+    path: data/smoke_task.jsonl
+    candidate_field: candidates
+    input_field: input
+    gold_field: gold
+
+prompt:
+  system: ""
+  demo_prefix: "### Example {i}\n"
+  query_prefix: "### Query\n"
+  answer_prefix: "### Answer\n"
+
+grid:
+  k_values: [0, 1, 2, 4, 8]
+  max_demos: 8
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 2
+    seed: 999
+
+selection_rule:
+  lambdas: [0.1, 0.3, 1.0]
+
+stop_rule:
+  kind: danger_regime
+  enabled: true
+  tau_entropy_drop: 0.01
+  require_bg_non_decrease: true
+
+baselines:
+  fixed_k: [2, 4]
+
+scoring:
+  batch_size: 8
+
+plot:
+  enabled: false

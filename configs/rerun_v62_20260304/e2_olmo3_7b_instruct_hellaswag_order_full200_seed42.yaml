@@ -1,0 +1,65 @@
+run:
+  name: e2_olmo3_7b_instruct_hellaswag_order_full200_seed42
+  seed: 42
+  output_dir: results_rerun_v62_20260304
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/allenai/Olmo-3-7B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: false
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 8
+
+task:
+  backend: hellaswag
+  hellaswag:
+    data_dir: /root/autodl-tmp/data/hellaswag-master/data
+    split: val
+    max_examples: 200
+    start_index: 0
+    demo_pool_size: 200
+    candidates: ["0", "1", "2", "3"]
+
+prompt:
+  system: ""
+  demo_prefix: "Context: "
+  query_prefix: "Context: "
+  answer_prefix: "Answer: "
+
+grid:
+  k_values: [0, 1, 2, 4, 8, 16]
+  max_demos: 16
+
+perturbations:
+  - kind: reverse_order
+  - kind: shuffle
+    num_samples: 4
+    seed: 999
+
+selection_rule:
+  lambdas: [0.1, 0.3, 1.0, 3.0]
+
+stop_rule:
+  kind: danger_regime
+  enabled: true
+  tau_entropy_drop: 0.01
+  require_bg_non_decrease: true
+
+baselines:
+  fixed_k: [16]
+
+cache:
+  enabled: true
+  dir: data/cache_scores_rerun_v62_20260304
+  namespace: olmo3_7b_instruct_hellaswag_full200_rerun20260304
+
+scoring:
+  batch_size: 8
+
+plot:
+  enabled: true
+

@@ -1,0 +1,49 @@
+# Test: GoEmotion k=8 with 10 examples only
+run:
+  name: test_goemotion_k8_small
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 8
+
+task:
+  backend: longiclbench
+  longiclbench:
+    dataset_name: launch/LongICLBench
+    split: GoEmotion
+    rounds: [1, 2, 3, 4, 5]
+    max_examples: 10  # Only 10 examples
+
+prompt:
+  system: ""
+  demo_prefix: "Text: "
+  query_prefix: "Text: "
+  answer_prefix: "Emotion: "
+
+grid:
+  k_values: [8]  # Only k=8
+  max_demos: 8
+
+perturbations:
+  - kind: pad_shift
+    pad_lengths: [32, 128, 512]
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: qwen2p5_3b_longiclbench_goemotion
+
+scoring:
+  batch_size: 8
+
+plot:
+  enabled: false

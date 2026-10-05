@@ -1,0 +1,58 @@
+run:
+  name: e2_decision_longiclbench_banking77
+  seed: 123
+  output_dir: results
+
+model:
+  backend: hf
+  hf:
+    model_name: meta-llama/Llama-3.1-8B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: false
+
+task:
+  backend: longiclbench
+  longiclbench:
+    dataset_name: TIGER-Lab/LongICLBench
+    split: BANKING77
+    max_examples: 100
+    rounds: [1, 2, 3, 4, 5]
+    batch_size: 1
+
+prompt:
+  system: ""
+  query_prefix: "service query: "
+
+grid:
+  k_values: [1, 2, 3, 4, 5]
+  max_demos: 5
+
+perturbations:
+  - kind: pad_shift
+    pad_token: "\n"
+    pad_lengths: [32, 128, 512]
+
+selection_rule:
+  lambdas: [0.1, 0.3, 1.0, 3.0]
+
+stop_rule:
+  kind: danger_regime
+  enabled: true
+  tau_entropy_drop: 0.01
+  require_bg_non_decrease: true
+
+baselines:
+  fixed_k: [1, 3, 5]
+
+cache:
+  enabled: true
+  dir: data/cache_scores
+  namespace: llama31_8b_longiclbench_banking77
+
+scoring:
+  batch_size: 4
+
+plot:
+  enabled: true
+

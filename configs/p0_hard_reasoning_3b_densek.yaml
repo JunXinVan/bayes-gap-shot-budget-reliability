@@ -1,0 +1,46 @@
+# P0: Hard Reasoning Dense K - Full trend observation
+experiment:
+  name: p0_hard_reasoning_3b_densek
+  output_dir: ./results
+  seed: 123
+  use_cache: true
+  cache_dir: ./cache
+
+task:
+  backend: hard_reasoning
+  hard_reasoning:
+    data_dir: /root/autodl-tmp/data/hard_reasoning
+    split: test
+    max_examples: 200
+    start_index: 0
+    demo_pool_size: 200
+
+model:
+  backend: hf
+  hf:
+    model_name: /root/autodl-tmp/hf_cache/models/Qwen/Qwen2___5-3B-Instruct
+    dtype: bfloat16
+    device: auto
+    trust_remote_code: true
+    use_chat_template: true
+    add_generation_prompt: true
+    batch_size: 4
+
+# Dense k sampling to capture fine-grained transitions
+k_values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16]
+
+prompt:
+  system: ""
+  demo_prefix: "Problem: "
+  query_prefix: "Problem: "
+  answer_prefix: "Solution: "
+
+evaluation:
+  metric: exact_match
+  candidates_from_task: true
+
+logging:
+  level: INFO
+  log_prompts: false
+
+namespace: p0_hard_reasoning_3b_densek
