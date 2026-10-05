@@ -1,8 +1,10 @@
 # When Additional Demonstrations Hurt: Bayes-Gap Accounting for Shot-Budget Reliability
 
+[![DOI](https://zenodo.org/badge/1405993058.svg)](https://doi.org/10.5281/zenodo.23168719)
+
 **Junxin Fan** (Fudan University) — sole author
 
-> **Status:** Manuscript under review at *Machine Learning* (Springer), 2026.
+> **Status:** Manuscript under review at *Machine Learning* (Springer), 2026. Archived at [doi.org/10.5281/zenodo.23168719](https://doi.org/10.5281/zenodo.23168719).
 > The paper PDF is in [`paper/`](paper/). This repository provides the full experiment codebase, raw result files, and figures behind the manuscript.
 
 ---
@@ -57,6 +59,8 @@ The smoke config uses a deterministic dummy model on the built-in fixture (`data
   author = {Fan, Junxin},
   title  = {When Additional Demonstrations Hurt: Bayes-Gap Accounting for Shot-Budget Reliability},
   year   = {2026},
+  doi    = {10.5281/zenodo.23168719},
+  url    = {https://doi.org/10.5281/zenodo.23168719},
   note   = {Manuscript under review at \emph{Machine Learning} (Springer)}
 }
 ```
