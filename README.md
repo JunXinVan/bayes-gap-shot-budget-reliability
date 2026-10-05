@@ -5,7 +5,7 @@
 **Junxin Fan** (Fudan University) — sole author
 
 > **Status:** Manuscript under review at *Machine Learning* (Springer), 2026. Archived at [doi.org/10.5281/zenodo.23168719](https://doi.org/10.5281/zenodo.23168719).
-> The paper PDF is in [`paper/`](paper/). This repository provides the full experiment codebase, raw result files, and figures behind the manuscript.
+> The paper PDF is in [`paper/`](paper/). This repository provides the full experiment codebase, the run configurations behind every reported table and figure ([`configs/`](configs/), see the [config manifest](configs/README.md) for the mapping), and the paper figures.
 
 ---
 
@@ -38,7 +38,7 @@ Language-model systems increasingly make a deployment-time choice about how much
 paper/      manuscript PDF (version under review)
 figures/    paper figures (PDF + PNG)
 src/overprompting_exp/   experiment package (CLI entry: overprompting_exp.cli)
-configs/    run configurations used for the reported experiments (YAML)
+configs/    run configurations for the reported experiments (YAML; manifest in configs/README.md)
 data/       tiny built-in fixtures for the smoke test
 download_dataset.py / download_assets.py   fetch public benchmark data
 ```

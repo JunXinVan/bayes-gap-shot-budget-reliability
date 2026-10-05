@@ -1,7 +1,7 @@
 run:
   name: e1_qwen2p5_3b_hellaswag_order_fast20_seed456
   seed: 456
-  output_dir: results
+  output_dir: results_rerun_v60_20260302
 model:
   backend: hf
   hf:
@@ -47,8 +47,8 @@ perturbations:
   seed: 999
 cache:
   enabled: true
-  dir: data/cache_scores
-  namespace: qwen2p5_3b_hellaswag_fast20
+  dir: data/cache_scores_rerun_v60_20260302
+  namespace: qwen2p5_3b_hellaswag_fast20_rerun20260302
 scoring:
   batch_size: 32
 plot:

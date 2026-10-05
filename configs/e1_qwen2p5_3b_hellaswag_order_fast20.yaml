@@ -1,8 +1,7 @@
 run:
   name: e1_qwen2p5_3b_hellaswag_order_fast20
   seed: 123
-  output_dir: results
-
+  output_dir: results_rerun_v60_20260302
 model:
   backend: hf
   hf:
@@ -13,7 +12,6 @@ model:
     use_chat_template: true
     add_generation_prompt: true
     batch_size: 4
-
 task:
   backend: hellaswag
   hellaswag:
@@ -23,31 +21,35 @@ task:
     data_fraction: 0.2
     start_index: 0
     demo_pool_size: 200
-    candidates: ["0", "1", "2", "3"]
-
+    candidates:
+    - '0'
+    - '1'
+    - '2'
+    - '3'
 prompt:
-  system: ""
-  demo_prefix: "Context: "
-  query_prefix: "Context: "
-  answer_prefix: "Answer: "
-
+  system: ''
+  demo_prefix: 'Context: '
+  query_prefix: 'Context: '
+  answer_prefix: 'Answer: '
 grid:
-  k_values: [0, 1, 2, 4, 8, 16]
+  k_values:
+  - 0
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
   max_demos: 16
-
 perturbations:
-  - kind: reverse_order
-  - kind: shuffle
-    num_samples: 4
-    seed: 999
-
+- kind: reverse_order
+- kind: shuffle
+  num_samples: 4
+  seed: 999
 cache:
   enabled: true
-  dir: data/cache_scores
-  namespace: qwen2p5_3b_hellaswag_fast20
-
+  dir: data/cache_scores_rerun_v60_20260302
+  namespace: qwen2p5_3b_hellaswag_fast20_rerun20260302
 scoring:
   batch_size: 4
-
 plot:
   enabled: true
